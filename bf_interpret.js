@@ -9,8 +9,10 @@ function brainfuck(bfText) {
     }
     var loopStarts = [];
     var pointer = 0;
+    var loopEscape = false;
     for(var i = 0; i < bfText.length; i++) {
             //console.log(pointer + " " + bfArray[pointer] + "  " + i + "  " + bfText.charAt(i));
+        if(loopEscape && bfText.charAt(i) != ']') continue;
         switch(bfText.charAt(i)) {
             case '>':
                 pointer++;
@@ -33,7 +35,11 @@ function brainfuck(bfText) {
                 bfArray[pointer]-=1;
                 break;
             case '[':
-                loopStarts.push(i);
+                if(bfArray[pointer] != 0) {
+                    loopStarts.push(i);
+                } else {
+                    loopEscape = true;   
+                }
                 break;
             case ']':
                 if(bfArray[pointer] != 0 && loopStarts.length > 0) {
